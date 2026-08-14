@@ -1,13 +1,21 @@
+import { Background } from "@/components";
+import { Colors, Fonts, Icons, Variables } from "@/constants";
+import { getAnimeByIdQuery } from "@/queries";
+import { useFavoriteStore } from "@/store";
+import { AnimeDetailType, AnimeGenreType } from "@/types";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import Octicons from "@expo/vector-icons/Octicons";
+import { useQuery } from "@tanstack/react-query";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useMemo } from "react";
 import {
-  View,
-  Text,
+  ActivityIndicator,
   Image,
   StyleSheet,
-  SafeAreaView,
+  Text,
   TouchableOpacity,
-  ActivityIndicator,
-  Platform,
+  View,
 } from "react-native";
 import Animated, {
   Extrapolation,
@@ -19,17 +27,7 @@ import Animated, {
   withSequence,
   withTiming,
 } from "react-native-reanimated";
-import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import Octicons from "@expo/vector-icons/Octicons";
-import { Colors, Fonts, Icons, Variables } from "@/constants";
-import { Background } from "@/components";
-import { useQuery } from "@tanstack/react-query";
-import { getAnimeByIdQuery } from "@/queries";
-import { useFavoriteStore } from "@/store";
-import { AnimeDetailType, AnimeGenreType } from "@/types";
 const dayjs = require("dayjs");
 
 const AnimeDetail = () => {
@@ -49,7 +47,7 @@ const AnimeDetail = () => {
       scrollAnimatedValue.value,
       [0, Variables.screenHeight * 0.6],
       [1, 0],
-      Extrapolation.CLAMP
+      Extrapolation.CLAMP,
     ),
   }));
 
@@ -57,7 +55,7 @@ const AnimeDetail = () => {
     backgroundColor: interpolateColor(
       scrollAnimatedValue.value,
       [Variables.screenHeight * 0.55, Variables.screenHeight * 0.6],
-      [`${Colors.primary}00`, Colors.primary]
+      [`${Colors.primary}00`, Colors.primary],
     ),
   }));
 
@@ -66,7 +64,7 @@ const AnimeDetail = () => {
       scrollAnimatedValue.value,
       [Variables.screenHeight * 0.55, Variables.screenHeight * 0.6],
       [0, 1],
-      Extrapolation.CLAMP
+      Extrapolation.CLAMP,
     ),
   }));
 
@@ -96,14 +94,14 @@ const AnimeDetail = () => {
             {
               name: "Demographic",
               values: data.demographics.map(
-                ({ name }: { name: string }) => name
+                ({ name }: { name: string }) => name,
               ),
             },
             { name: "Duration", values: data.duration },
             { name: "Rating", values: data.rating },
           ]
         : [],
-    [data]
+    [data],
   );
 
   const scrollHandler = useAnimatedScrollHandler((event) => {
@@ -114,11 +112,13 @@ const AnimeDetail = () => {
     return str ? str.charAt(0).toUpperCase() + str.slice(1) : "";
   }
 
-  function getAbbreviationScoredBy(scoredBy: number) {
-    return Intl.NumberFormat("en-US", {
-      notation: "compact",
-      maximumFractionDigits: 1,
-    }).format(scoredBy);
+  function getAbbreviationScoredBy(scoredBy: number | undefined) {
+    if (scoredBy)
+      return Intl.NumberFormat("en-US", {
+        notation: "compact",
+        maximumFractionDigits: 1,
+      }).format(scoredBy);
+    return 0;
   }
 
   function getIsFavorite() {
@@ -133,7 +133,7 @@ const AnimeDetail = () => {
   function startHeartAnimation(isFavorite: boolean) {
     heartAnimatedValue.value = withSequence(
       withTiming(1.5, { duration: 200 }),
-      withTiming(isFavorite ? 0 : 1, { duration: 200 })
+      withTiming(isFavorite ? 0 : 1, { duration: 200 }),
     );
   }
 
@@ -143,38 +143,33 @@ const AnimeDetail = () => {
         style={[
           styles.headerView,
           headerAnimatedStyle,
-          { paddingTop: Platform.select({ android: insets.top, ios: 0 }) },
+          { paddingTop: insets.top },
         ]}
       >
-        <SafeAreaView>
-          <View style={styles.headerRowView}>
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={() => router.back()}
-              style={styles.backTouch}
+        <View style={styles.headerRowView}>
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => router.back()}
+            style={styles.backTouch}
+          >
+            <FontAwesome6 name="chevron-left" style={styles.chevronLeftIcon} />
+          </TouchableOpacity>
+          {data && (
+            <Animated.View
+              style={[styles.headerTitleView, headerTitleAnimatedStyle]}
             >
-              <FontAwesome6
-                name="chevron-left"
-                style={styles.chevronLeftIcon}
-              />
-            </TouchableOpacity>
-            {data && (
-              <Animated.View
-                style={[styles.headerTitleView, headerTitleAnimatedStyle]}
+              <Text
+                numberOfLines={1}
+                style={[styles.titleText, styles.smallerTitleText]}
               >
-                <Text
-                  numberOfLines={1}
-                  style={[styles.titleText, styles.smallerTitleText]}
-                >
-                  {data.titles[data.titles.length - 1].title}
-                </Text>
-                <Text numberOfLines={1} style={styles.alternativeTitleText}>
-                  {data.titles[0].title}
-                </Text>
-              </Animated.View>
-            )}
-          </View>
-        </SafeAreaView>
+                {data.titles[data.titles.length - 1].title}
+              </Text>
+              <Text numberOfLines={1} style={styles.alternativeTitleText}>
+                {data.titles[0].title}
+              </Text>
+            </Animated.View>
+          )}
+        </View>
       </Animated.View>
     );
   }
@@ -190,7 +185,7 @@ const AnimeDetail = () => {
           {[
             data.type,
             capitalize(
-              `${[data.season, data.year].filter((value) => !!value).join(" ")}`
+              `${[data.season, data.year].filter((value) => !!value).join(" ")}`,
             ),
           ]
             .filter((value) => !!value)
@@ -243,14 +238,14 @@ const AnimeDetail = () => {
 
   function renderExtraInfo() {
     return extraInfo.map((info, i) =>
-      renderSimpleInfo(i, info.name, info.values)
+      renderSimpleInfo(i, info.name, info.values),
     );
   }
 
   function renderSimpleInfo(
     index: number,
     name: string,
-    values: string | string[]
+    values: string | string[],
   ) {
     const value =
       values?.constructor === Array ? values.join(" • ") : values || "-";
@@ -315,7 +310,7 @@ const AnimeDetail = () => {
           renderError()
         )}
       </View>
-      {!isLoading && renderHeader()}
+      {renderHeader()}
     </View>
   );
 };
@@ -326,10 +321,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
   },
   headerView: {
+    // height: 100,
     width: "100%",
     justifyContent: "center",
     position: "absolute",
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.purple,
     paddingLeft: 15,
   },
   headerRowView: {

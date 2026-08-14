@@ -1,11 +1,11 @@
-import React from "react";
-import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
-import { FasterImageView } from "@candlefinance/faster-image";
-import { Fonts, Variables, Icons, Colors } from "@/constants";
-import { useRouter } from "expo-router";
+import { Colors, Fonts, Icons, Variables } from "@/constants";
+import { useFavoriteStore } from "@/store";
 import { AnimeDetailType } from "@/types";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useFavoriteStore } from "@/store";
+import { useRouter } from "expo-router";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React from "react";
+import FastImage from "@d11/react-native-fast-image";
 
 type Props = { data: AnimeDetailType | undefined };
 
@@ -23,11 +23,10 @@ export default function AnimeCard({ data }: Props) {
       onPress={() => router.navigate(`/anime/${data?.mal_id}`)}
       style={styles.mainView}
     >
-      <FasterImageView
+      <FastImage
         source={{
-          url: data?.images.jpg.image_url || "",
-          showActivityIndicator: true,
-          borderRadius: 10,
+          uri: data?.images.jpg.image_url || "",
+          priority: FastImage.priority.low,
         }}
         style={styles.animeImage}
       />
@@ -79,6 +78,7 @@ const styles = StyleSheet.create({
     height: Variables.screenWidth * 0.4,
     resizeMode: "cover",
     marginBottom: 12,
+    borderRadius: 10,
   },
   starImage: {
     width: 12,

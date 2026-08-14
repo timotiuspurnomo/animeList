@@ -1,6 +1,3 @@
-rm -rf package-lock.json yarn.lock node_modules
-cd ios
-rm -rf Podfile.lock Pods
-cd ..
+rm -rf package-lock.json yarn.lock node_modules ios/Podfile.lock ios/Pods
 npm i
-npx expo prebuild
+# npx expo prebuild --clean

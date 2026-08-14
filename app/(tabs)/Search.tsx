@@ -1,11 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
-import { View, SafeAreaView, StyleSheet } from "react-native";
-import { useQuery } from "@tanstack/react-query";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Background, SearchBar, SearchResults } from "@/components";
 import { Colors } from "@/constants";
-import { AnimeGenreType } from "@/types";
 import { getAnimeGenresQuery } from "@/queries";
+import { AnimeGenreType } from "@/types";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useMemo, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 export default function Search() {
   const insets = useSafeAreaInsets();
@@ -16,7 +19,7 @@ export default function Search() {
       data
         ? data.filter((genre: AnimeGenreType) => genre.count || 0 > 1000)
         : [],
-    [data]
+    [data],
   );
 
   useEffect(() => {

@@ -1,15 +1,12 @@
-import React, { useState } from "react";
-import {
-  Animated,
-  View,
-  SafeAreaView,
-  StyleSheet,
-  Platform,
-} from "react-native";
-import { Extrapolation } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Background, AnimeListThisSeason } from "@/components";
+import { AnimeListThisSeason, Background } from "@/components";
 import { Colors, Fonts, Images, Variables } from "@/constants";
+import React, { useState } from "react";
+import { Animated, Platform, StyleSheet, View } from "react-native";
+import { Extrapolation } from "react-native-reanimated";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 export default function Index() {
   const insets = useSafeAreaInsets();
@@ -62,7 +59,7 @@ export default function Index() {
             scrollEventThrottle={1}
             onScroll={Animated.event(
               [{ nativeEvent: { contentOffset: { y: scrollAnimatedValue } } }],
-              { useNativeDriver: false }
+              { useNativeDriver: false },
             )}
           />
         </View>
