@@ -1,6 +1,10 @@
 # Welcome to AnimeList
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A simplified alternative of MyAnimeList.
+
+## Screenshots
+
+<img src="/assets/images/screenshots/1.png" alt="Screenshot 1" width="205"> <img src="/assets/images/screenshots/2.png" alt="Screenshot 2" width="205"> <img src="/assets/images/screenshots/3.png" alt="Screenshot 3" width="205"> <img src="/assets/images/screenshots/4.png" alt="Screenshot 4" width="205">
 
 ## Try the app
 
@@ -26,8 +30,8 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    Production-grade framework for React Native.\
    I always recommend Expo instead of CLI because it simplifies developing and building the app.
 
-2. Jikan API\
-   Jikan is an unofficial & open-source API for MyAnimeList.
+2. Tenrai API\
+   Tenrai is an unofficial & open-source API for MyAnimeList.
 
 3. Zustand\
    Small and fast state management library.\

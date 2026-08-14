@@ -1,10 +1,13 @@
-import React, { useMemo } from "react";
-import { Text, View, StyleSheet, SafeAreaView } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AnimeList, Background } from "@/components";
 import { Colors, Fonts, Variables } from "@/constants";
 import { useFavoriteStore } from "@/store";
 import { AnimeDetailType } from "@/types";
+import { useMemo } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 export default function Favorite() {
   const insets = useSafeAreaInsets();
@@ -13,9 +16,9 @@ export default function Favorite() {
     () =>
       Object.entries(favouriteAnimeListObj).map(
         ([_, favouriteAnime]: [_: string, favouriteAnime: AnimeDetailType]) =>
-          favouriteAnime
+          favouriteAnime,
       ),
-    [favouriteAnimeListObj]
+    [favouriteAnimeListObj],
   );
 
   function renderEmptyList() {
